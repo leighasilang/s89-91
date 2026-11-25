@@ -1,118 +1,173 @@
-
 <template>
     <div class="details-page">
+
+            <!-- Reading Progress Bar -->
+        <div class="reading-progress">
+            <div
+                class="reading-progress-bar"
+                :style="{ width: readingProgress + '%' }"
+            ></div>
+        </div>
+
+        <!-- Navigation -->
         <nav class="navbar blog-navbar">
             <div class="container">
                 <router-link to="/" class="navbar-brand fw-bold">
-                    My Blog 🌼
+                    My Blog <span>✿</span>
                 </router-link>
 
-                <router-link to="/" class="btn btn-light btn-sm">
-                    ← Back to Blog
+                <router-link to="/" class="back-to-blog">
+                    ← Back to Stories
                 </router-link>
             </div>
         </nav>
 
-        <div class="container py-5">
-            <div v-if="loading" class="text-center">
-                Loading post...
+        <main class="container details-main">
+            <div v-if="loading" class="details-loading">
+                Loading your story...
             </div>
 
-            <div v-else-if="!post" class="empty-state">
-                Post not found.
+            <div v-else-if="!post" class="details-empty">
+                <span>🌷</span>
+                <h2>Story not found</h2>
+                <p>This story may have been removed or is unavailable.</p>
+                <router-link to="/" class="details-back-btn">
+                    Return to Blog
+                </router-link>
             </div>
 
             <template v-else>
-                <!-- Post Content -->
-                <article class="details-card mb-4">
-                    <span class="post-tag">BLOG POST</span>
+                <!-- Article -->
+                <article class="details-card">
+                    <div class="article-top">
+                        <span class="post-tag">A STORY TO REMEMBER</span>
+                        <span class="article-flower">✿</span>
+                    </div>
 
-                    <h1 class="details-title mt-3">
+                    <h1 class="details-title">
                         {{ post.title }}
                     </h1>
 
                     <div class="details-author">
-                        Written by {{ post.author?.username }}
+                        <div class="author-icon">🌼</div>
+                        <div>
+                            <p class="author-name">
+                                {{ post.author?.username || "Anonymous" }}
+                            </p>
+                            <p class="article-date">
+                                Published on
+                                {{ new Date(post.createdAt).toLocaleDateString("en-PH", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric"
+                                }) }}
+                            </p>
+                        </div>
                     </div>
 
-                    <hr />
+                    <div class="article-divider"></div>
 
-                    <p class="details-content">
+                    <div class="details-content">
                         {{ post.content }}
-                    </p>
+                    </div>
 
-                    <div class="details-date">
-                        <span>Published on </span>
-                        <strong>
-                            {{ new Date(post.createdAt).toLocaleString("en-PH", {
-                                dateStyle: "long",
-                                timeStyle: "short"
-                            }) }}
-                        </strong>
+                    <div class="article-ending">
+                        <span>✿</span>
+                        <p>Thank you for taking the time to read.</p>
+                        <span>✿</span>
                     </div>
                 </article>
 
                 <!-- Comments -->
                 <section class="comments-card">
-                    <h2>Comments 💬</h2>
+                    <div class="comments-heading">
+                        <div>
+                            <span class="comments-label">COMMUNITY</span>
+                            <h2>Let's Talk About It 💬
+                                <span class="comment-count">
+                                    ({{ post.comments?.length || 0 }})
+                                </span>
+                            </h2>
+                            <p>Every thought and perspective is welcome.</p>
+                        </div>
 
-                    <p class="section-description">
-                        Join the conversation.
-                    </p>
+                        <div class="comments-decoration">❀</div>
+                    </div>
 
-                    <div v-if="currentUser" class="mb-4">
+                    <div v-if="currentUser" class="comment-form">
                         <form @submit.prevent="addComment">
+                            <label class="form-label">Share your thoughts</label>
+
                             <textarea
                                 v-model="commentText"
                                 class="form-control"
-                                rows="3"
-                                placeholder="Write a comment..."
+                                rows="4"
+                                placeholder="Write something kind..."
                                 required
                             ></textarea>
 
                             <button type="submit" class="btn publish-btn mt-3">
-                                Add Comment
+                                Post Comment →
                             </button>
                         </form>
                     </div>
 
-                    <div v-else class="login-notice mb-4">
-                        <router-link to="/login">Login</router-link>
-                        to leave a comment.
+                    <div v-else class="login-notice">
+                        <p>
+                            Want to join the conversation?
+                            <router-link to="/login">Login</router-link>
+                            to leave a comment.
+                        </p>
                     </div>
 
-                    <p class="auth-message">{{ message }}</p>
+                    <p v-if="message" class="auth-message">
+                        {{ message }}
+                    </p>
 
-                    <div
-                        v-if="!post.comments || post.comments.length === 0"
-                        class="empty-comments"
-                    >
-                        No comments yet. Be the first to comment! 🌷
-                    </div>
+                    <div class="comments-list">
+                        <div
+                            v-if="!post.comments || post.comments.length === 0"
+                            class="empty-comments"
+                        >
+                            <span>🌷</span>
+                            <p>No comments yet.</p>
+                            <small>Be the first to share your thoughts!</small>
+                        </div>
 
-                    <div
-                        v-for="comment in post.comments"
-                        :key="comment._id"
-                        class="comment-item"
-                    >
-                        <strong>{{ comment.user?.username }}</strong>
-                        <p class="mb-1">{{ comment.text }}</p>
-                        <small class="text-muted">
-                            {{ new Date(comment.createdAt).toLocaleString() }}
-                        </small>
+                        <div
+                            v-for="comment in post.comments"
+                            :key="comment._id"
+                            class="comment-item"
+                        >
+                            <div class="comment-avatar">🌿</div>
+
+                            <div class="comment-body">
+                                <strong>
+                                    {{ comment.user?.username || "Anonymous" }}
+                                </strong>
+
+                                <p>{{ comment.text }}</p>
+
+                                <small>
+                                    {{ new Date(comment.createdAt).toLocaleString("en-PH") }}
+                                </small>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </template>
-        </div>
+        </main>
 
-        <footer class="blog-footer text-center">
+        <footer class="blog-footer">
             <p class="mb-0">Made with 💜 | My Blog © 2026</p>
         </footer>
     </div>
 </template>
 
+
+
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import api from "../api/axios";
 
@@ -125,6 +180,24 @@ const commentText = ref("");
 const message = ref("");
 
 const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+
+// Reading Progress
+const readingProgress = ref(0);
+
+const updateReadingProgress = () => {
+    const scrollableHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+    if (scrollableHeight <= 0) {
+        readingProgress.value = 100;
+        return;
+    }
+
+    readingProgress.value = Math.min(
+        100,
+        Math.max(0, (window.scrollY / scrollableHeight) * 100)
+    );
+};
 
 const getPost = async () => {
     try {
@@ -155,5 +228,13 @@ const addComment = async () => {
 
 onMounted(() => {
     getPost();
+
+    window.addEventListener("scroll", updateReadingProgress);
+    updateReadingProgress();
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", updateReadingProgress);
 });
 </script>
+

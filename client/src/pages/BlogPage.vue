@@ -39,6 +39,9 @@
         </nav>
         <!-- End of NavBar -->
 
+        <!-- Main Content -->
+        <main class="container blog-main">
+
             <!-- Hero Section -->
             <section class="hero-section mb-5">
                 <div class="hero-decoration">✿</div>
@@ -263,6 +266,8 @@
         </section>
         <!-- End of Edit Post -->
 
+        </main>
+        <!-- End of Main Content -->
 
         <!-- Footer -->
         <footer class="blog-footer text-center">

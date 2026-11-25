@@ -1,15 +1,25 @@
-
 <template>
     <div class="auth-page">
         <div class="auth-card">
+
+            <router-link to="/" class="auth-brand">
+                <span>✿</span> My Blog
+            </router-link>
+
+            <div class="auth-decoration">❀</div>
+
             <div class="auth-icon">🌼</div>
 
-            <h1>Welcome Back!</h1>
+            <p class="auth-label">WELCOME BACK</p>
+
+            <h1>It's lovely to see you.</h1>
+
             <p class="auth-description">
-                Login to continue sharing your stories.
+                Login to continue sharing your stories and discovering new ones.
             </p>
 
             <form @submit.prevent="login">
+
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
                     <input
@@ -21,7 +31,7 @@
                     />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label">Password</label>
                     <input
                         v-model="password"
@@ -33,20 +43,24 @@
                 </div>
 
                 <button type="submit" class="btn auth-btn w-100">
-                    Login
+                    Login to Your Account →
                 </button>
+
             </form>
 
-            <p class="auth-message">{{ message }}</p>
+            <p v-if="message" class="auth-message">
+                {{ message }}
+            </p>
 
             <div class="auth-footer">
                 Don't have an account?
-                <router-link to="/register">Register here</router-link>
+                <router-link to="/register">Join our community</router-link>
             </div>
 
             <router-link to="/" class="back-link">
                 ← Back to Blog
             </router-link>
+
         </div>
     </div>
 </template>
